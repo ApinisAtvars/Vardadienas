@@ -1,4 +1,4 @@
-package com.example.vardadienas.data
+package com.example.vardadienas.data.repositories
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
