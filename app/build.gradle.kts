@@ -86,6 +86,8 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     ksp(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.ui.text.google.fonts)
 }
 
 room {

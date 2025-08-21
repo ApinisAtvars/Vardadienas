@@ -40,7 +40,7 @@ fun MainScreen() {
                 // Add all our screens to the drawer
                 appScreens.forEach { screen ->
                     NavigationDrawerItem(
-                        label = { Text(text = screen.title, color = MaterialTheme.colorScheme.primary) },
+                        label = { Text(text = screen.title, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge) },
                         icon = { Icon(imageVector = screen.icon, contentDescription = screen.title) },
                         selected = (currentRoute == screen.route),
                         onClick = {

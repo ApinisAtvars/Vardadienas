@@ -12,9 +12,9 @@ sealed class Screen(
     val title: String,
     val icon: ImageVector
 ) {
-    object Welcome : Screen("welcome", "Welcome", Icons.Default.Home)
-    object Calendar : Screen("calendar", "Calendar", Icons.Default.DateRange)
-    object About : Screen("about", "About", Icons.Default.Info)
+    object Welcome : Screen("welcome", "Sākums", Icons.Default.Home)
+    object Calendar : Screen("calendar", "Kalendārs", Icons.Default.DateRange)
+    object About : Screen("about", "Informācija", Icons.Default.Info)
 }
 
 // A list of all our screens for easy access in the UI

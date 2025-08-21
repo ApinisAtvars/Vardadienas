@@ -7,7 +7,7 @@ import com.example.vardadienas.ui.components.GenericScreen
 @Composable
 fun WelcomeScreen() {
     GenericScreen(
-        title = "Welcome!",
-        content = "This is the main screen of our app."
+        title = "Vārdadienas",
+        content = "Tīri tā, lai ērtāk."
     )
 }
