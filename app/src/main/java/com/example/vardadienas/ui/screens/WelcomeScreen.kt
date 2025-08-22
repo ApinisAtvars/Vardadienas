@@ -10,4 +10,5 @@ fun WelcomeScreen() {
         title = "Vārdadienas",
         content = "Tīri tā, lai ērtāk."
     )
+    // TODO: Add name searching functionality + Today's namedays
 }

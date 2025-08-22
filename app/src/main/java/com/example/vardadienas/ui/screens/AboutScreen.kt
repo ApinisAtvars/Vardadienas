@@ -9,4 +9,5 @@ fun AboutScreen() {
         title = "About This App",
         content = "This app was created to demonstrate navigation."
     )
+    // TODO: Add thanks to PMLP and Nameday GitHub repo
 }

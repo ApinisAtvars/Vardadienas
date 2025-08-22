@@ -88,7 +88,9 @@ fun MainScreen() {
                 // Define the composable for each screen route
                 composable(Screen.Welcome.route) { WelcomeScreen() }
                 composable(Screen.Calendar.route) { CalendarScreen() }
+                composable(Screen.Settings.route) { SettingsScreen() }
                 composable(Screen.About.route) { AboutScreen() }
+
             }
         }
     }

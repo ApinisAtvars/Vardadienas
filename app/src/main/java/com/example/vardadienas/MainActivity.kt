@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.example.vardadienas.helpers.NameDayNotifier
 import com.example.vardadienas.ui.theme.NothingDark // Make sure this matches your theme's package
 import com.example.vardadienas.ui.viewModels.NameDayViewModel
 
@@ -18,6 +19,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NameDayNotifier(this).createNotificationChannel()
         nameDayViewModel.nameDays.observe(this) { names ->
             // Update your UI here! For example, update a RecyclerView or TextView.
             // 'names' is the List<NameDay>

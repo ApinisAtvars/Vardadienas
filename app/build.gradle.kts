@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.vardadienas"
-        minSdk = 29
+        minSdk = 33
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -88,6 +88,15 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     implementation(libs.androidx.ui.text.google.fonts)
+
+    // WorkManager for background tasks
+    implementation(libs.androidx.work.runtime.ktx)
+
+    // DataStore for saving user preferences
+    implementation(libs.androidx.datastore.preferences)
+
+    // ViewModel and LiveData/Flow for UI state
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
 }
 
 room {

@@ -3,6 +3,7 @@ package com.example.vardadienas.ui.screens
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,7 +16,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
@@ -30,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import java.text.SimpleDateFormat
@@ -157,19 +162,55 @@ fun CalendarScreen(viewModel: CalendarViewModel = viewModel()) {
                                         }
                                     } else {
                                         if (personNameData != null) {
-                                            Text(
-                                                text = "Vārds: ${personNameData!!.name}\n" +
-                                                        "Sastopams: ${personNameData!!.amount}\n" +
-                                                        "Vārdadiena: ${personNameData!!.nameDay}\n" +
-                                                        "Skaidrojums: ${personNameData!!.explanation}",
+                                            Column(
                                                 modifier = Modifier
-                                                    .fillMaxSize()
-                                                    .wrapContentSize(Alignment.Center),
-                                                textAlign = TextAlign.Center,
-                                            )
+                                                    .fillMaxWidth()
+                                                    .padding(16.dp),
+                                                horizontalAlignment = Alignment.CenterHorizontally,
+                                                verticalArrangement = Arrangement.spacedBy(12.dp) // Adds space between each element
+                                            ) {
+                                                // 1. Name as the heading
+                                                Text(
+                                                    text = personNameData!!.name,
+                                                    style = MaterialTheme.typography.headlineMedium,
+                                                    textAlign = TextAlign.Center
+                                                )
+
+                                                // Divider for visual separation
+                                                HorizontalDivider(
+                                                    modifier = Modifier.padding(vertical = 4.dp),
+                                                    thickness = DividerDefaults.Thickness,
+                                                    color = DividerDefaults.color
+                                                )
+
+                                                // 2. Table-like rows for key-value pairs
+                                                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                                                    InfoRow(label = "Sastopams", value = personNameData!!.amount.toString())
+                                                    InfoRow(label = "Vārdadiena", value = personNameData!!.nameDay)
+                                                }
+
+                                                // 3. Section for the longer explanation text
+                                                Column(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalAlignment = Alignment.Start
+                                                ) {
+                                                    Text(
+                                                        text = "Skaidrojums:",
+                                                        style = MaterialTheme.typography.titleSmall,
+                                                        fontWeight = FontWeight.Bold,
+                                                        modifier = Modifier.padding(bottom = 4.dp)
+                                                    )
+                                                    Text(
+                                                        text = personNameData!!.explanation,
+                                                        style = MaterialTheme.typography.bodyMedium
+                                                    )
+                                                }
+                                            }
+                                            // --- End of Changed Code ---
                                         } else {
                                             Text(
-                                                text = "Nav vairāk informācijas."
+                                                text = "Nav vairāk informācijas.",
+                                                modifier = Modifier.padding(16.dp)
                                             )
                                         }
                                     }
@@ -181,6 +222,26 @@ fun CalendarScreen(viewModel: CalendarViewModel = viewModel()) {
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun InfoRow(label: String, value: String) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween, // Pushes label left, value right
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = "$label:",
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = value,
+            style = MaterialTheme.typography.bodyLarge,
+            textAlign = TextAlign.End
+        )
     }
 }
 
