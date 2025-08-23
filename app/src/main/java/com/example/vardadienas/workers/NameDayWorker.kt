@@ -30,37 +30,18 @@ class NameDayWorker(
         return try {
             when (notificationType) {
                 TYPE_TODAY_NAMEDAY -> {
-                    // TODO: Replace with your actual logic to get today's name day
                     val todaysNameDay = NameDayRepository(this.applicationContext).getNameDayForToday().map { nameDay -> nameDay.name }.toString().replace("[", "").replace("]", "")
-                    notifier.showTodaysNameDayNotification(todaysNameDay)
-                    rescheduleNextDay()
+                    if (todaysNameDay.isNotBlank()) {
+                        notifier.showTodaysNameDayNotification(todaysNameDay)
+                    }
+                    // REMOVED: No more self-rescheduling!
                 }
-                TYPE_UPCOMING_NAMEDAY -> {
-                    // TODO: This is where you'll add the logic for upcoming name days
-                    // val upcomingNameDays = getSubscribedUpcomingNameDays()
-                    // notifier.showUpcomingNameDayNotification(upcomingNameDays)
-                }
-                else -> {
-                    // If no type is specified, do nothing or log an error
-                }
+                // ... other types
             }
             Result.success()
-        } catch (e: IOException) {
-            // e.g., Network error
-            Result.retry()
         } catch (e: Exception) {
             Log.e("NameDayWorker", "Error showing notification", e)
             Result.failure()
         }
-    }
-
-    private suspend fun rescheduleNextDay() {
-        // Read the user's preferred time from DataStore
-        val dataStore = SettingsDataStore(applicationContext)
-        val time = dataStore.notificationTime.first() // .first() gets the current value
-
-        // Schedule the next worker for tomorrow at the same time
-        val scheduler = NotificationScheduler(applicationContext)
-        scheduler.scheduleDailyNameDayNotification(hour = time.first, minute = time.second)
     }
 }

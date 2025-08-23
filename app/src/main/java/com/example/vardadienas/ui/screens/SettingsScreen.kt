@@ -30,12 +30,10 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel = viewModel()
 ) {
     val areNotificationsEnabled by settingsViewModel.areDailyNotificationsEnabled.collectAsStateWithLifecycle()
-    val notificationTime by settingsViewModel.notificationTime.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
     // State to control our custom rationale dialog
     var showRationaleDialog by remember { mutableStateOf(false) }
-    var showTimePicker by remember { mutableStateOf(false) } // State for time picker
 
     val timePickerState = rememberTimePickerState(
         initialHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
@@ -69,21 +67,13 @@ fun SettingsScreen(
         )
     }
 
-    if (showTimePicker) {
-        NotificationTimePickerDialog(
-            onConfirm = {settingsViewModel.onNotificationTimeChanged(timePickerState.hour, timePickerState.minute); showTimePicker = false; Log.d("SettingsScreen", "${settingsViewModel.notificationTime.value.first}:${settingsViewModel.notificationTime.value.second}")},
-            onDismiss = { showTimePicker = false },
-            timePickerState = timePickerState
-        )
-    }
-
     Column(modifier = Modifier.padding(16.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text("Dienišķie vārdadienu atgādinājumi", style = MaterialTheme.typography.bodyLarge)
+            Text("Dienišķie vārdadienu paziņojumi", style = MaterialTheme.typography.bodyLarge)
             Switch(
                 checked = areNotificationsEnabled,
                 onCheckedChange = { isChecked ->
@@ -111,16 +101,12 @@ fun SettingsScreen(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-//                .clickable(enabled = areNotificationsEnabled) { showTimePicker = true }
                 .padding(vertical = 8.dp)
                 .alpha(if (areNotificationsEnabled) 1f else 0.5f), // Gray out when disabled
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-                Text("Atgādinājumu laiks:", style = MaterialTheme.typography.bodyLarge)
-                TextButton(onClick = { showTimePicker = true }, enabled = areNotificationsEnabled) {
-                    Text(text = "${notificationTime.first}:${notificationTime.second}", style = MaterialTheme.typography.labelLarge)
-                }
+                Text("Es tev paziņošu par vārda dienām starp 9:00 un 11:00", style = MaterialTheme.typography.bodyLarge)
         }
     }
 }
@@ -135,7 +121,7 @@ private fun NotificationPermissionRationaleDialog(
         title = { Text(text = "Ļauj man paziņot!") },
         text = {
             Text(
-                text = "Lai es varu tev atgādināt par vārda dienām." +
+                text = "Lai es varētu tev atgādināt par vārda dienām." +
                         "Vai tu piekrīti?"
             )
         },
@@ -155,26 +141,4 @@ private fun NotificationPermissionRationaleDialog(
             }
         }
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NotificationTimePickerDialog(
-    onConfirm: () -> Unit,
-    onDismiss: () -> Unit,
-    timePickerState: TimePickerState
-) {
-    Box (Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        Column {
-            TimeInput(
-                state = timePickerState,
-            )
-            Button(onClick = onDismiss) {
-                Text("Atcelt")
-            }
-            Button(onClick = onConfirm) {
-                Text("Labiņi")
-            }
-        }
-    }
 }

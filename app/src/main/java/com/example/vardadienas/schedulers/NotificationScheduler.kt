@@ -12,42 +12,51 @@ class NotificationScheduler(private val context: Context) {
         const val DAILY_NAMEDAY_WORK_TAG = "daily_nameday_work"
     }
 
-    fun scheduleDailyNameDayNotification(hour: Int, minute: Int) {
-        val initialDelay = calculateInitialDelay(hour, minute)
+    fun scheduleDailyNameDayNotification() {
+        val initialDelay = calculateInitialDelayToNineAm()
 
         val inputData = workDataOf(
             NameDayWorker.KEY_NOTIFICATION_TYPE to NameDayWorker.TYPE_TODAY_NAMEDAY
         )
 
-        // Use OneTimeWorkRequest for precise timing
-        val workRequest = OneTimeWorkRequestBuilder<NameDayWorker>()
+        // This is the core of the new strategy
+        val workRequest = PeriodicWorkRequestBuilder<NameDayWorker>(
+            24, TimeUnit.HOURS, // Repeat every 24 hours
+            2, TimeUnit.HOURS   // Flex time: run within the last 2 hours of the interval
+        )
             .setInitialDelay(initialDelay, TimeUnit.MILLISECONDS)
             .setInputData(inputData)
             .build()
 
-        // Use REPLACE policy to cancel the old worker and start a new one if the time changes
-        WorkManager.getInstance(context).enqueueUniqueWork(
+        // Use KEEP policy: If work is already scheduled, do nothing.
+        // This prevents rescheduling every time the user opens the settings screen.
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             DAILY_NAMEDAY_WORK_TAG,
-            ExistingWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.KEEP,
             workRequest
         )
     }
 
-    private fun calculateInitialDelay(hour: Int, minute: Int): Long {
+    /**
+     * Calculates the time from now until 9 AM tomorrow.
+     * This ensures the 24-hour period starts at 9 AM every day.
+     * The flex time means the work will run between 9 AM and 11 AM.
+     */
+    private fun calculateInitialDelayToNineAm(): Long {
         val now = Calendar.getInstance()
-        val scheduledTime = Calendar.getInstance().apply {
-            set(Calendar.HOUR_OF_DAY, hour)
-            set(Calendar.MINUTE, minute)
+        val nineAmToday = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 9)
+            set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
             set(Calendar.MILLISECOND, 0)
         }
 
-        // If the scheduled time for today is in the past, schedule it for tomorrow
-        if (scheduledTime.before(now)) {
-            scheduledTime.add(Calendar.DAY_OF_MONTH, 1)
+        // If it's already past 9 AM today, schedule for 9 AM tomorrow.
+        if (nineAmToday.before(now)) {
+            nineAmToday.add(Calendar.DAY_OF_MONTH, 1)
         }
 
-        return scheduledTime.timeInMillis - now.timeInMillis
+        return nineAmToday.timeInMillis - now.timeInMillis
     }
 
     fun cancelDailyNameDayNotification() {
