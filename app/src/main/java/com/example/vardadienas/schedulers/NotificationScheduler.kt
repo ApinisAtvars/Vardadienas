@@ -37,11 +37,6 @@ class NotificationScheduler(private val context: Context) {
         )
     }
 
-    /**
-     * Calculates the time from now until 9 AM tomorrow.
-     * This ensures the 24-hour period starts at 9 AM every day.
-     * The flex time means the work will run between 9 AM and 11 AM.
-     */
     private fun calculateInitialDelayToNineAm(): Long {
         val now = Calendar.getInstance()
         val nineAmToday = Calendar.getInstance().apply {

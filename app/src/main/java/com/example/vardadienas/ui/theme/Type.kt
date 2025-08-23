@@ -87,6 +87,13 @@ val Typography = Typography(
         lineHeight = 22.sp,
         letterSpacing = 0.25.sp
     ),
+    bodySmall = TextStyle(
+      fontFamily = libertinusSerifFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 13.sp,
+        lineHeight = 20.sp,
+        letterSpacing = 0.4.sp
+    ),
     // Style for Buttons, Tabs, and other functional UI elements.
     // Using a sans-serif here provides a clean, functional contrast.
     labelLarge = TextStyle(
