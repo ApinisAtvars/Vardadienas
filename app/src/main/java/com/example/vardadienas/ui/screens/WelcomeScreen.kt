@@ -1,12 +1,16 @@
 package com.example.vardadienas.ui.screens
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -43,13 +48,36 @@ val descriptionFunnies: List<String> = listOf(
     )
 @Composable
 fun WelcomeScreen() {
+    var visible by remember { mutableStateOf(false) } // For sliding in when the app is started
+    val animatedOffsetY by animateDpAsState(
+        targetValue = if (visible) 0.dp else (-200).dp,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioNoBouncy, stiffness = Spring.StiffnessLow), // Adjust duration as needed
+        label = "offsetAnimation"
+    )
+    val animatedOffsetX by animateDpAsState(
+        targetValue = if (visible) 0.dp else (-200).dp,
+        animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy, stiffness = Spring.StiffnessVeryLow), // Start 200ms later
+        label = "offsetAnimation2"
+    )
+
+    LaunchedEffect(key1 = true) { // Trigger the animation when this composable is composed
+        // delay(100)
+        visible = true
+    }
+
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text("Vārdadienas", style = MaterialTheme.typography.headlineLarge, color = MaterialTheme.colorScheme.primary)
-        FadingText(texts = descriptionFunnies, periodMillis = 5000, animationDurationMillis = 1000)
+        Text("Vārdadienas",
+            style = MaterialTheme.typography.headlineLarge,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.offset(y = animatedOffsetY))
+        FadingText(texts = descriptionFunnies,
+            periodMillis = 5000,
+            animationDurationMillis = 1000,
+            modifier = Modifier.offset(x = animatedOffsetX))
     }
     // TODO: Add name searching functionality + Today's namedays
 }
@@ -57,22 +85,16 @@ fun WelcomeScreen() {
 @Composable
 fun FadingText(
     texts: List<String>,
+    modifier: Modifier = Modifier, // Accept a modifier
     periodMillis: Long = 3000,
     animationDurationMillis: Int = 750
 ) {
-    // 1. Create a shuffled version of the list that is remembered across recompositions.
-    // The `shuffled()` function will only be called ONCE when this composable
-    // is first added to the composition.
     val shuffledTexts = remember { texts.shuffled() }
-
-    // 2. The state that holds the current index in the *shuffled* list.
-    // We can safely start from 0 now.
-    var currentIndex by remember { mutableIntStateOf(0) }
+    var currentIndex by remember { mutableStateOf(0) }
 
     LaunchedEffect(key1 = true) {
         while (true) {
             delay(periodMillis)
-            // Update the index, using the size of our shuffled list.
             currentIndex = (currentIndex + 1) % shuffledTexts.size
         }
     }
@@ -80,14 +102,15 @@ fun FadingText(
     Crossfade(
         targetState = currentIndex,
         animationSpec = tween(durationMillis = animationDurationMillis),
-        label = "FadingTextAnimation"
+        label = "FadingTextAnimation",
+        modifier = modifier // Apply the passed modifier here
     ) { index ->
+        // ... rest of the FadingText composable is the same
         Box(
             modifier = Modifier.fillMaxWidth(),
             contentAlignment = Alignment.Center
         ) {
             Text(
-                // 3. Use the shuffled list to get the text.
                 text = shuffledTexts[index],
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.secondary,

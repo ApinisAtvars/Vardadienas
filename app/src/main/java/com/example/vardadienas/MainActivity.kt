@@ -20,13 +20,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NameDayNotifier(this).createNotificationChannel()
-        nameDayViewModel.nameDays.observe(this) { names ->
-            // Update your UI here! For example, update a RecyclerView or TextView.
-            // 'names' is the List<NameDay>
-            Log.d("MainActivity", "Name days for today: $names")
-        }
+//        nameDayViewModel.nameDays.observe(this) { names ->
+//            Log.d("MainActivity", "Name days for today: $names")
+//        }
         setContent {
-            // Your app's theme, created by Android Studio
             NothingDark {
                 Surface(
                     modifier = Modifier.fillMaxSize(),

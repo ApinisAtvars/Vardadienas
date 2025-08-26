@@ -56,10 +56,9 @@ fun SearchScreen(viewModel: SearchNameViewModel = viewModel()) {
     val allSearchResults by viewModel.allListNames
     val areSearchResultsLoading by viewModel.areAllListNamesLoading
 
-//    val searchText = remember {mutableStateOf("")}
-    LaunchedEffect(allSearchResults) {
-        Log.d("SearchScreen", "allSearchResults: $allSearchResults")
-    }
+//    LaunchedEffect(allSearchResults) {
+//        Log.d("SearchScreen", "allSearchResults: $allSearchResults")
+//    }
 
     Column {
         CustomSearchBar { viewModel.fetchListOfNames(it) }

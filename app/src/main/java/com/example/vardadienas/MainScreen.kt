@@ -1,5 +1,10 @@
 package com.example.vardadienas
 
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
@@ -7,6 +12,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -30,14 +36,13 @@ fun MainScreen() {
     // Get the current screen's route to highlight the active item in the drawer
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-    
+
 
     // This is the main layout structure for the app
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                // Add all our screens to the drawer
                 appScreens.forEach { screen ->
                     NavigationDrawerItem(
                         label = { Text(text = screen.title, color = MaterialTheme.colorScheme.primary, style = MaterialTheme.typography.labelLarge) },
@@ -62,8 +67,8 @@ fun MainScreen() {
                 // The bar at the top of the screen
                 TopAppBar(
                     title = {
-                        // Find the title for the current screen, default to "Welcome"
-                        val title = appScreens.find { it.route == currentRoute }?.title ?: "Welcome"
+                        // Find the title for the current screen, default to ""
+                        val title = appScreens.find { it.route == currentRoute }?.title ?: ""
                         Text(text = title, color = MaterialTheme.colorScheme.primary)
                     },
                     navigationIcon = {
@@ -86,11 +91,46 @@ fun MainScreen() {
                 modifier = Modifier.padding(paddingValues)
             ) {
                 // Define the composable for each screen route
+                // Welcome screen without any animations, those are handled within that screen.
                 composable(Screen.Welcome.route) { WelcomeScreen() }
-                composable(Screen.Search.route) { SearchScreen() }
-                composable(Screen.Calendar.route) { CalendarScreen() }
-                composable(Screen.Settings.route) { SettingsScreen() }
-                composable(Screen.About.route) { AboutScreen() }
+                // Uncomment this, and comment out everything below to remove animations
+//                composable(Screen.Search.route) { SearchScreen() }
+//                composable(Screen.Calendar.route) { CalendarScreen() }
+//                composable(Screen.Settings.route) { SettingsScreen() }
+//                composable(Screen.About.route) { AboutScreen() }
+
+                val slideSpec = spring<IntOffset>(Spring.DampingRatioLowBouncy, Spring.StiffnessLow)
+                composable(
+                    route = Screen.Search.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = slideSpec) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = slideSpec) },
+                    popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }, animationSpec = slideSpec) },
+                    popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = slideSpec) },
+                ) { SearchScreen() }
+
+                composable(
+                    route = Screen.Calendar.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = slideSpec) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = slideSpec) },
+                    popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }, animationSpec = slideSpec) },
+                    popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = slideSpec) },
+                ) { CalendarScreen() }
+
+                composable(
+                    route = Screen.Settings.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = slideSpec) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = slideSpec) },
+                    popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }, animationSpec = slideSpec) },
+                    popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = slideSpec) },
+                ) { SettingsScreen() }
+
+                composable(
+                    route = Screen.About.route,
+                    enterTransition = { slideInHorizontally(initialOffsetX = { it }, animationSpec = slideSpec) },
+                    exitTransition = { slideOutHorizontally(targetOffsetX = { -it }, animationSpec = slideSpec) },
+                    popEnterTransition = { slideInHorizontally(initialOffsetX = { -it }, animationSpec = slideSpec) },
+                    popExitTransition = { slideOutHorizontally(targetOffsetX = { it }, animationSpec = slideSpec) },
+                ) { AboutScreen() }
 
             }
         }
