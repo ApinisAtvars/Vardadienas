@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -21,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -32,6 +35,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -57,6 +61,11 @@ fun SearchScreen(viewModel: SearchNameViewModel = viewModel()) {
     val allSearchResults by viewModel.allListNames
     val areSearchResultsLoading by viewModel.areAllListNamesLoading
 
+    // For scroll to top button
+    // TODO: Implement scroll to top button (https://developer.android.com/develop/ui/compose/lists#control-scroll-position)
+//    val listState = rememberLazyListState()
+//    val coroutineScope = rememberCoroutineScope()
+
 //    LaunchedEffect(allSearchResults) {
 //        Log.d("SearchScreen", "allSearchResults: $allSearchResults")
 //    }
@@ -64,7 +73,7 @@ fun SearchScreen(viewModel: SearchNameViewModel = viewModel()) {
     Column {
         CustomSearchBar { viewModel.fetchListOfNames(it) }
 
-        LazyColumn {
+        LazyColumn (){
             if (!areSearchResultsLoading) {
                 allSearchResults.forEach { item ->
 //                    item { SearchResultItem(item) }
@@ -94,13 +103,14 @@ fun SearchScreen(viewModel: SearchNameViewModel = viewModel()) {
                                 }
                             }
                         }
+
                     }
                 }
 
             } else {
                 item {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(),
+                    LinearProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxSize(),
                         color = MaterialTheme.colorScheme.secondary,
                         trackColor = MaterialTheme.colorScheme.background
                     )
@@ -111,34 +121,35 @@ fun SearchScreen(viewModel: SearchNameViewModel = viewModel()) {
 
 }
 
-@Composable
-fun SearchResultItem(item: PersonNameInList) {
-    Card(Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 20.dp, vertical = 4.dp)) {
-
-        Text(text = item.name, style= MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
-        HorizontalDivider(Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
-
-        Row(Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Text("Sastopams:", style = MaterialTheme.typography.bodyLarge)
-            Text(item.amount.toString(), style = MaterialTheme.typography.bodyMedium)
-        }
-
-        Row(Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Text("Vārda diena:", style = MaterialTheme.typography.bodyLarge)
-            if (!item.nameDay.isNullOrBlank()) { // If name is not null, "", or " "
-                Text(item.nameDay, style = MaterialTheme.typography.bodyMedium)
-            } else {
-                Text("-", style = MaterialTheme.typography.bodyMedium)
-            }
-        }
-    }
-}
+// Same as in above function, but I cannot use a custom component for items, because I wanted the fade in and out animations
+//@Composable
+//fun SearchResultItem(item: PersonNameInList) {
+//    Card(Modifier
+//        .fillMaxWidth()
+//        .padding(horizontal = 20.dp, vertical = 4.dp)) {
+//
+//        Text(text = item.name, style= MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+//        HorizontalDivider(Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
+//
+//        Row(Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+//            Text("Sastopams:", style = MaterialTheme.typography.bodyLarge)
+//            Text(item.amount.toString(), style = MaterialTheme.typography.bodyMedium)
+//        }
+//
+//        Row(Modifier
+//            .fillMaxWidth()
+//            .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+//            Text("Vārda diena:", style = MaterialTheme.typography.bodyLarge)
+//            if (!item.nameDay.isNullOrBlank()) { // If name is not null, "", or " "
+//                Text(item.nameDay, style = MaterialTheme.typography.bodyMedium)
+//            } else {
+//                Text("-", style = MaterialTheme.typography.bodyMedium)
+//            }
+//        }
+//    }
+//}
 
 @Composable
 fun CustomSearchBar(
@@ -169,13 +180,14 @@ fun CustomSearchBar(
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(
                 onSearch = { performSearch() } // Call performSearch when "Enter" is pressed
-            )
+            ),
+            shape = RoundedCornerShape(16.dp)
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Button(onClick = { performSearch() }) { // Call performSearch on button click
-            Text("Meklēt", style = MaterialTheme.typography.labelLarge)
-        }
+//        Button(onClick = { performSearch() }) { // Call performSearch on button click
+//            Text("Meklēt", style = MaterialTheme.typography.labelLarge)
+//        }
     }
 }

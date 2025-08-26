@@ -97,6 +97,9 @@ dependencies {
 
     // ViewModel and LiveData/Flow for UI state
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Paging
+    implementation(libs.androidx.paging.compose)
 }
 
 room {
