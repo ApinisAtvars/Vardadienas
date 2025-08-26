@@ -35,6 +35,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.traversalIndex
@@ -115,6 +117,14 @@ fun CustomSearchBar(
     onSearch: (String) -> Unit
 ) {
     var text by remember { mutableStateOf("") }
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
+
+    val performSearch = {
+        onSearch(text)
+        keyboardController?.hide() // Hide the keyboard
+        focusManager.clearFocus()  // Remove focus from the TextField, which also hides the cursor
+    }
 
     Row(
         modifier = Modifier
@@ -124,20 +134,20 @@ fun CustomSearchBar(
     ) {
         OutlinedTextField(
             value = text,
-            onValueChange = { text = it }, // only update local state
+            onValueChange = { text = it },
             modifier = Modifier.weight(1f),
-            placeholder = { Text("Ievadi vārdu", style= MaterialTheme.typography.labelLarge) },
+            placeholder = { Text("Ievadi vārdu", style = MaterialTheme.typography.labelLarge) },
             singleLine = true,
             keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
             keyboardActions = KeyboardActions(
-                onSearch = { onSearch(text) } // search when "Enter" (Search IME action) is pressed
+                onSearch = { performSearch() } // Call performSearch when "Enter" is pressed
             )
         )
 
         Spacer(modifier = Modifier.width(8.dp))
 
-        Button(onClick = { onSearch(text) }) {
-            Text("Meklēt", style= MaterialTheme.typography.labelLarge)
+        Button(onClick = { performSearch() }) { // Call performSearch on button click
+            Text("Meklēt", style = MaterialTheme.typography.labelLarge)
         }
     }
 }
