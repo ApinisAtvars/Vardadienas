@@ -15,6 +15,13 @@ data class PersonNameData (
     val explanation: String // Some names have explanations written for them
 )
 
+data class PersonNameInList (
+    val name: String, // Name of person
+    val amount: Int, // Amount of people with that name (this is known before clicking on a name)
+    val nameDay: String?, // DD.MM name day date also known before clicking, some names don't contain nameDays
+    val linkToMoreInfo: String? // Can be null if the person name is not clickable
+)
+
 class PMLPrepository {
     private val client = OkHttpClient()
     private val baseUrl = "https://personvardi.pmlp.gov.lv/"
@@ -42,6 +49,50 @@ class PMLPrepository {
                 val finalData = getPersonDataFromDetailsPage(detailsUrl)
 
                 Result.success(finalData)
+
+            } catch (e: Exception) {
+                // Catch any network or parsing errors
+                Result.failure(e)
+            }
+        }
+    }
+
+    suspend fun fetchListOfPersonNames(personName: String): Result<List<PersonNameInList>> {
+        return withContext(Dispatchers.IO) {
+            try {
+                val searchUrl = "${baseUrl}index.php?name=$personName"
+                val request = Request.Builder().url(searchUrl).build()
+                val response = client.newCall(request).execute()
+
+                if (!response.isSuccessful) throw IOException("Search request failed: ${response.code}")
+
+                val html = response.body.string()
+                if (html.isEmpty()) throw IOException("Empty response body from search.")
+
+                val document = Jsoup.parse(html)
+
+                val allRows = document.select("div.table-responsive.my-5 table.table tbody tr") // Get everything, which is probably not a good idea. TODO: Change the logic here for pagination
+                if (allRows == null) {
+                    throw IOException("No rows found in the search results.")
+                }
+
+                var allPersonNames = mutableListOf<PersonNameInList>()
+
+                allRows.forEach { row ->
+                    val allTds = row.select("td")
+//                    val name = row.selectFirst("td")?.text()?.trim()
+//                    val link = row.selectFirst("a")?.attr("href")
+                    val name = allTds[0].text().trim()
+                    val link = allTds[0].selectFirst("a")?.attr("href")
+                    val amount = allTds[1].text().trim().toIntOrNull() ?: 0
+                    val nameDay = allTds[2].text().trim()
+
+                    allPersonNames.add(PersonNameInList(name, amount, nameDay, link))
+
+                }
+
+
+                Result.success(allPersonNames)
 
             } catch (e: Exception) {
                 // Catch any network or parsing errors

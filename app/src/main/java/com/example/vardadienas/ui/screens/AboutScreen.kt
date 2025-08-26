@@ -35,7 +35,7 @@ fun AboutScreen() {
             withLink(
                 LinkAnnotation.Url(
                     "https://github.com/ApinisAtvars/Vardadienas",
-                    TextLinkStyles(style = SpanStyle(color = Color.LightGray))
+                    TextLinkStyles(style = SpanStyle(color = MaterialTheme.colorScheme.secondary))
                 )
             ) {
                 append("šeit")
@@ -43,7 +43,7 @@ fun AboutScreen() {
             append(").")
         })
 
-        Text(text = "Vai kaut kas nestrādā?", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 16.dp))
+//        Text(text = "Vai kaut kas nestrādā?", style = MaterialTheme.typography.titleLarge, modifier = Modifier.padding(top = 16.dp))
         // TODO: Create an issue tracking board, and add a link to it here.
 //        Text(text = buildAnnotatedString {
 //            append("Izskaidro kļūdu manā GitHub dēlī: ")
@@ -62,7 +62,7 @@ fun AboutScreen() {
             withLink(
                 LinkAnnotation.Url(
                     "https://personvardi.pmlp.gov.lv/",
-                    TextLinkStyles(style = SpanStyle(color = Color.LightGray))
+                    TextLinkStyles(style = SpanStyle(color = MaterialTheme.colorScheme.secondary))
                 )
             ) {
                 append("PMLP personvārdu datu bāzes")
@@ -76,7 +76,7 @@ fun AboutScreen() {
             withLink(
                 LinkAnnotation.Url(
                     "https://gist.github.com/laacz/5cccb056a533dffb2165",
-                    TextLinkStyles(style = SpanStyle(color = Color.LightGray))
+                    TextLinkStyles(style = SpanStyle(color = MaterialTheme.colorScheme.secondary))
                 )
             ) {
                 append(" laacz")

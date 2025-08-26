@@ -12,9 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 private val NothingDarkTheme = darkColorScheme(
-    primary = Color(242,242,242),
-    secondary = Color(234,228,213),
-    tertiary = Color(182, 176,159),
+    primary = Color(253, 253, 253),
+    secondary = Color(215, 215, 215, 255),
+    tertiary = Color(215, 25,33),
+
     background = Color.Black,
     surfaceTint = Color.Transparent,
     surface = Color.Black

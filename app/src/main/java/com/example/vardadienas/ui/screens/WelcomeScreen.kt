@@ -38,7 +38,8 @@ val descriptionFunnies: List<String> = listOf(
     "I <3 Latvia",
     "Live, Love Latvia",
     "502 Bad Gateway",
-    "Lielākoties strādā."
+    "Lielākoties strādā.",
+    "Mākslīgā intelekta palīgs nāks drīzumā!"
     )
 @Composable
 fun WelcomeScreen() {

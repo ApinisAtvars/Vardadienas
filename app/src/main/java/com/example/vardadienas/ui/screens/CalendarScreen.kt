@@ -88,10 +88,10 @@ fun CalendarScreen(viewModel: CalendarViewModel = viewModel()) {
             colors = DatePickerDefaults.colors(
                 containerColor = MaterialTheme.colorScheme.background,
                 selectedDayContainerColor = MaterialTheme.colorScheme.background,
-                dayContentColor = MaterialTheme.colorScheme.tertiary,
+                dayContentColor = MaterialTheme.colorScheme.secondary,
                 selectedDayContentColor = MaterialTheme.colorScheme.primary,
                 todayDateBorderColor = MaterialTheme.colorScheme.background,
-                todayContentColor = MaterialTheme.colorScheme.secondary
+                todayContentColor = MaterialTheme.colorScheme.tertiary
             )
         )
         if (selectedDateMillis != null) {
