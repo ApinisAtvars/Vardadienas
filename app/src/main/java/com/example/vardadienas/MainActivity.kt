@@ -1,7 +1,6 @@
 package com.example.vardadienas
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -10,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.example.vardadienas.helpers.NameDayNotifier
-import com.example.vardadienas.ui.theme.NothingDark // Make sure this matches your theme's package
+import com.example.vardadienas.ui.theme.AppTheme // Make sure this matches your theme's package
 import com.example.vardadienas.ui.viewModels.NameDayViewModel
 
 class MainActivity : ComponentActivity() {
@@ -24,7 +23,7 @@ class MainActivity : ComponentActivity() {
 //            Log.d("MainActivity", "Name days for today: $names")
 //        }
         setContent {
-            NothingDark {
+            AppTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

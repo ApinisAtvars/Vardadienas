@@ -55,7 +55,7 @@ fun MainScreen() {
                             scope.launch {
                                 drawerState.close()
                             }
-                        }
+                        },
                     )
                 }
             }

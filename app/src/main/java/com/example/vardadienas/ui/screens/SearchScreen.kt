@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
@@ -66,12 +67,40 @@ fun SearchScreen(viewModel: SearchNameViewModel = viewModel()) {
         LazyColumn {
             if (!areSearchResultsLoading) {
                 allSearchResults.forEach { item ->
-                    item { SearchResultItem(item) }
+//                    item { SearchResultItem(item) }
+                    item {
+                        Card(Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp, vertical = 4.dp).animateItem()) {
+
+                            Text(text = item.name, style= MaterialTheme.typography.headlineMedium, textAlign = TextAlign.Center, modifier = Modifier.fillMaxWidth())
+                            HorizontalDivider(Modifier.padding(vertical = 4.dp, horizontal = 8.dp))
+
+                            Row(Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                                Text("Sastopams:", style = MaterialTheme.typography.bodyLarge)
+                                Text(item.amount.toString(), style = MaterialTheme.typography.bodyMedium)
+                            }
+
+                            Row(Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                                Text("Vārda diena:", style = MaterialTheme.typography.bodyLarge)
+                                if (!item.nameDay.isNullOrBlank()) { // If name is not null, "", or " "
+                                    Text(item.nameDay, style = MaterialTheme.typography.bodyMedium)
+                                } else {
+                                    Text("-", style = MaterialTheme.typography.bodyMedium)
+                                }
+                            }
+                        }
+                    }
                 }
+
             } else {
                 item {
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        modifier = Modifier.align(Alignment.CenterHorizontally).fillMaxWidth(),
                         color = MaterialTheme.colorScheme.secondary,
                         trackColor = MaterialTheme.colorScheme.background
                     )
