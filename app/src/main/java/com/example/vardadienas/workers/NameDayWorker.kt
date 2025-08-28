@@ -34,9 +34,7 @@ class NameDayWorker(
                     if (todaysNameDay.isNotBlank()) {
                         notifier.showTodaysNameDayNotification(todaysNameDay)
                     }
-                    // REMOVED: No more self-rescheduling!
                 }
-                // ... other types
             }
             Result.success()
         } catch (e: Exception) {

@@ -5,8 +5,10 @@ import android.util.Log
 import com.example.vardadienas.data.Converters
 import com.example.vardadienas.data.MonthDayAdapter
 import com.example.vardadienas.data.NameDayDatabase
+import com.example.vardadienas.data.entities.FavouriteNameDayReminder
 import com.example.vardadienas.data.entities.NameDay
 import com.example.vardadienas.data.entities.NameDayExtended
+import com.example.vardadienas.data.entities.NameDayWithFavourites
 import com.example.vardadienas.data.valueClasses.MonthDay
 import java.text.SimpleDateFormat
 import java.time.LocalDate
@@ -22,9 +24,7 @@ class NameDayRepository(context: Context) {
     // Get a reference to the DAOs. This is where the database is actually initialized on first call.
     private val nameDayDao = NameDayDatabase.Companion.getDatabase(context.applicationContext).nameDayDao()
     private val nameDayExtendedDao = NameDayDatabase.Companion.getDatabase(context.applicationContext).nameDayExtendedDao()
-
-    // Expose functions that the rest of your app can call to get data.
-    // The UI layer doesn't need to know that this data comes from Room.
+    private val favouriteNameDayDao = NameDayDatabase.Companion.getDatabase(context.applicationContext).favouriteNameDayDao()
 
     // Main Name Days
     fun getAllNameDays(): List<NameDay> {
@@ -65,5 +65,18 @@ class NameDayRepository(context: Context) {
 
     fun getExtendedNameDayByDate(date: MonthDay): List<NameDayExtended> {
         return nameDayExtendedDao.getNameDayByDate(date)
+    }
+
+    // Favourite name days (Reminders)
+    fun getAllFavourites(): List<NameDayWithFavourites> {
+        return favouriteNameDayDao.getAllFavourites()
+    }
+
+    fun addFavourite(newFavourite: FavouriteNameDayReminder) {
+        return favouriteNameDayDao.addFavourite(newFavourite)
+    }
+
+    fun removeFavourite(favouriteToRemove: FavouriteNameDayReminder) {
+        return favouriteNameDayDao.removeFavourite(favouriteToRemove)
     }
 }

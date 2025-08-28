@@ -1,5 +1,6 @@
 package com.example.vardadienas.helpers
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -32,6 +33,7 @@ class NameDayNotifier(private val context: Context) {
         notificationManager.createNotificationChannel(channel)
     }
 
+    @SuppressLint("MissingPermission") // Permission is checked in settings, when notifications are turned on.
     fun showTodaysNameDayNotification(nameDay: String) {
         // Create an intent that opens the app when the notification is tapped
         val intent = Intent(context, MainActivity::class.java).apply {
@@ -47,9 +49,8 @@ class NameDayNotifier(private val context: Context) {
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
 
-        // Make sure you have the POST_NOTIFICATIONS permission before calling this
         with(NotificationManagerCompat.from(context)) {
-            notify(1, builder.build()) // Use a unique ID for each notification
+            notify(1, builder.build())
         }
     }
 }

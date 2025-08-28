@@ -70,4 +70,8 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+
+    fun subscribeToNameDay(nameDay: NameDay) {
+        throw NotImplementedError("Subscription to name days not yet implemented")
+    }
 }

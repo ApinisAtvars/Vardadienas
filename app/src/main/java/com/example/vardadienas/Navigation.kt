@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
 
 // Sealed class to define our app's screens
@@ -15,6 +16,7 @@ sealed class Screen(
     val icon: ImageVector
 ) {
     object Welcome : Screen("welcome", "Sākums", Icons.Default.Home)
+    object Favourites : Screen("favourites", "Favorītie", Icons.Default.Star)
     object Search : Screen("search", "Meklēt", Icons.Default.Search)
     object Calendar : Screen("calendar", "Kalendārs", Icons.Default.DateRange)
     object Settings : Screen("settings", "Uzstādījumi", Icons.Default.Settings)
@@ -24,6 +26,7 @@ sealed class Screen(
 // A list of all our screens for easy access in the UI
 val appScreens = listOf(
     Screen.Welcome,
+    Screen.Favourites,
     Screen.Search,
     Screen.Calendar,
     Screen.Settings,

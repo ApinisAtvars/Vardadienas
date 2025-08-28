@@ -93,6 +93,7 @@ fun MainScreen() {
                 // Define the composable for each screen route
                 // Welcome screen without any animations, those are handled within that screen.
                 composable(Screen.Welcome.route) { WelcomeScreen() }
+                composable(Screen.Favourites.route) { FavouriteScreen() }
                 // Uncomment this, and comment out everything below to remove animations
 //                composable(Screen.Search.route) { SearchScreen() }
 //                composable(Screen.Calendar.route) { CalendarScreen() }

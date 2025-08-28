@@ -7,8 +7,10 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.vardadienas.data.daos.FavouriteNameDayDao
 import com.example.vardadienas.data.daos.NameDayDao
 import com.example.vardadienas.data.daos.NameDayExtendedDao
+import com.example.vardadienas.data.entities.FavouriteNameDayReminder
 import com.example.vardadienas.data.entities.NameDay
 import com.example.vardadienas.data.entities.NameDayExtended
 import com.example.vardadienas.data.valueClasses.MonthDay
@@ -18,11 +20,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [NameDay::class, NameDayExtended::class], version = 1)
+@Database(entities = [NameDay::class, NameDayExtended::class, FavouriteNameDayReminder::class], version = 1)
 @TypeConverters(Converters::class)
 abstract class NameDayDatabase : RoomDatabase() {
     abstract fun nameDayDao(): NameDayDao
     abstract fun nameDayExtendedDao(): NameDayExtendedDao
+    abstract fun favouriteNameDayDao(): FavouriteNameDayDao
+
 
     companion object {
         @Volatile
