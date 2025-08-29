@@ -17,6 +17,20 @@ interface FavouriteNameDayDao {
     """)
     fun getAllFavourites(): List<NameDayWithFavourites>
 
+    @Transaction
+    @Query("""
+        SELECT * FROM nameDays 
+        WHERE nameDayId IN (SELECT nameDayId FROM nameDays WHERE name = :name)
+    """)
+    fun getAllFavouritesForName(name: String): List<NameDayWithFavourites>
+
+    @Transaction
+    @Query("""
+        SELECT * FROM nameDays 
+        WHERE nameDayId = :namedayId
+    """)
+    fun getAllFavouritesForNamedayId(namedayId: Int): NameDayWithFavourites
+
     @Insert(entity = FavouriteNameDayReminder::class)
     fun addFavourite(newFavourite: FavouriteNameDayReminder)
 

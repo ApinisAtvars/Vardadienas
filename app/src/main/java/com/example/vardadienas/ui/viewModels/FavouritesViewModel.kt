@@ -45,6 +45,10 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
+                    if (nameDayRepository.checkIdenticalFavourite(newFavourite)) {
+                        Log.d("FavouritesViewModel", "Favourite already exists")
+                        return@withContext
+                    }
                     nameDayRepository.addFavourite(newFavourite)
                 }
             } catch (e: Exception) {
@@ -52,13 +56,32 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
             }
         }
     }
-
     fun removeFavourite(favouriteToRemove: FavouriteNameDayReminder) {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) {
                     nameDayRepository.removeFavourite(favouriteToRemove)
                 }
+
+                // Update the list of all reminders on the UI thread so that database doesn't need to be queried
+                val currentList = _favourites.value
+
+
+                val updatedList = currentList
+                    .map { nameDayWithFavs ->
+                        nameDayWithFavs.copy(
+                            reminders = nameDayWithFavs.reminders.filter { reminder ->
+                                reminder.id != favouriteToRemove.id
+                            }
+                        )
+                    }
+                    // also remove the entire NameDay entry if it has no reminders left.
+                    .filter { nameDayWithFavs ->
+                        nameDayWithFavs.reminders.isNotEmpty()
+                    }
+
+                _favourites.value = updatedList
+
             } catch (e: Exception) {
                 Log.d("FavouritesViewModel", "Error removing favourite: ${e.message}")
             }

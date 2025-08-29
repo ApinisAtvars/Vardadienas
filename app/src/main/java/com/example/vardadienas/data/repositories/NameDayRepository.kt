@@ -79,4 +79,19 @@ class NameDayRepository(context: Context) {
     fun removeFavourite(favouriteToRemove: FavouriteNameDayReminder) {
         return favouriteNameDayDao.removeFavourite(favouriteToRemove)
     }
+
+    /**
+    * @return true if the favourite already exists (a reminder with the exact same time to remind)
+     */
+    fun checkIdenticalFavourite(favouriteToCheck: FavouriteNameDayReminder): Boolean {
+        val nameDay = favouriteNameDayDao.getAllFavouritesForNamedayId(favouriteToCheck.nameDayId)
+        Log.d("NameDayRepository", "fetched nameDay: $nameDay")
+
+        nameDay.reminders.forEach { reminder ->
+            if (reminder.dateToRemind == favouriteToCheck.dateToRemind) {
+                return true
+            }
+        }
+        return false
+    }
 }
