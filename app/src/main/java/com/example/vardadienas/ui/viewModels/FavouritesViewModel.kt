@@ -22,6 +22,7 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     private val _isFavouritesLoading = mutableStateOf(false)
     val isFavouritesLoading: State<Boolean> = _isFavouritesLoading
 
+
     fun fetchAllFavourites() {
         viewModelScope.launch {
             _isFavouritesLoading.value = true

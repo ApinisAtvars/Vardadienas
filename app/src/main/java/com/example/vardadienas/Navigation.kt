@@ -16,7 +16,7 @@ sealed class Screen(
     val icon: ImageVector
 ) {
     object Welcome : Screen("welcome", "Sākums", Icons.Default.Home)
-    object Favourites : Screen("favourites", "Favorītie", Icons.Default.Star)
+//    object Favourites : Screen("favourites", "Favorītie", Icons.Default.Star)
     object Search : Screen("search", "Meklēt", Icons.Default.Search)
     object Calendar : Screen("calendar", "Kalendārs", Icons.Default.DateRange)
     object Settings : Screen("settings", "Uzstādījumi", Icons.Default.Settings)
@@ -26,7 +26,7 @@ sealed class Screen(
 // A list of all our screens for easy access in the UI
 val appScreens = listOf(
     Screen.Welcome,
-    Screen.Favourites,
+//    Screen.Favourites,
     Screen.Search,
     Screen.Calendar,
     Screen.Settings,

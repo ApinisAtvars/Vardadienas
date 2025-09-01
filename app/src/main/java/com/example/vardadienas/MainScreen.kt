@@ -93,7 +93,19 @@ fun MainScreen() {
                 // Define the composable for each screen route
                 // Welcome screen without any animations, those are handled within that screen.
                 composable(Screen.Welcome.route) { WelcomeScreen() }
-                composable(Screen.Favourites.route) { FavouriteScreen() }
+
+                 /*
+                 Favourites is a functionality I was working on for a while, but it seemed like too much work for a tiny feature
+
+                 It's very unfinished, and doesn't do anything, but the idea was to set a custom reminder for very special names
+                 So you could pick options from the ReminderOption enum, or specify a custom date and maybe time
+                 The main problems:
+                     1. The notification worker I have for the daily reminders only works when the app is open in the background.
+                     2. The worker cannot send a notification when the phone is in Doze mode, so an AlarmManager needs to be used.
+                     3. Probably some issues with the extra day every 4 years, which I don't account for.
+                 */
+//                composable(Screen.Favourites.route) { FavouriteScreen() }
+
                 // Uncomment this, and comment out everything below to remove animations
 //                composable(Screen.Search.route) { SearchScreen() }
 //                composable(Screen.Calendar.route) { CalendarScreen() }
